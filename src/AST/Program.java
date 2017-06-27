@@ -10,6 +10,11 @@ public class Program extends ASTNode {
     m=am; cl=acl; 
   }
 
+  public void Print() {
+    System.out.println("Program");
+    m.Print();
+  }
+
   public void accept(Visitor v) {
     v.visit(this);
   }

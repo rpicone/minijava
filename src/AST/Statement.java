@@ -5,5 +5,10 @@ public abstract class Statement extends ASTNode {
     public Statement(int ln) {
         super(ln);
     }
+
+    public void Print() {
+        System.out.println("Statement");
+    }
+
     public abstract void accept(Visitor v);
 }
