@@ -3,6 +3,7 @@ package com.minijava;
 import java.io.FileReader;
 
 import AST.Program;
+import AST.Visitor.PrettyPrintVisitor;
 import java_cup.runtime.*;
 
 public class Main {
@@ -30,6 +31,9 @@ public class Main {
             root = p.parse(); // parses the program
             Program program = (Program) root.value;
             program.Print();
+
+            PrettyPrintVisitor pretty = new PrettyPrintVisitor();
+            pretty.visit(program);
 
             System.out.println("Nenhum erro encontrado");
         } catch (Exception e) {
