@@ -4,6 +4,7 @@ import java.io.FileReader;
 
 import AST.Program;
 import AST.Visitor.PrettyPrintVisitor;
+import AST.Visitor.VariaveisVerificacaoVisitor;
 import java_cup.runtime.*;
 
 public class Main {
@@ -24,18 +25,39 @@ public class Main {
             System.out.println("Parsing " + sourceFile);
             Scanner s = new Scanner(new UnicodeEscapes(new FileReader(sourceFile)));
             parser p = new parser(s);
-            Symbol root;
-            // replace p.parse() with p.debug_parse() in next line to see trace
-            // of
-            // parser shift/reduce actions during parse
-            root = p.parse(); // parses the program
-            Program program = (Program) root.value;
-            program.Print();
+            Symbol simboloInicial = p.parse();
+            Program program = (Program) simboloInicial.value;
 
+            // Exibindo código-fonte do programa (PrettyPrint)
+            System.out.println("");
+            System.out.println("CÓDIGO FONTE");
+            System.out.println("========================================================================");
             PrettyPrintVisitor pretty = new PrettyPrintVisitor();
             pretty.visit(program);
 
-            System.out.println("Nenhum erro encontrado");
+            // Imprimindo a AST
+            System.out.println("");
+            System.out.println("AST");
+            System.out.println("========================================================================");
+            program.Print();
+
+            // Verificando as declarações e tipos de variáveis
+            System.out.println("");
+            System.out.println("VERIFICAÇÃO DAS VARIÁVEIS");
+            System.out.println("========================================================================");
+            VariaveisVerificacaoVisitor variaveisVerificacaoVisitor = new VariaveisVerificacaoVisitor();
+            variaveisVerificacaoVisitor.visit(program);
+
+            System.out.println("");
+            System.out.println("RELATÓRIO FINAL");
+            System.out.println("========================================================================");
+            // Exibindo resumo das atividades
+            int errosTipo = variaveisVerificacaoVisitor.getErrosEncontrados();
+            if (errosTipo > 0) {
+                System.err.println("Encontrados " + errosTipo);
+            } else {
+                System.out.println("Nenhum erro encontrado");
+            }
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
