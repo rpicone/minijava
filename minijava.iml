@@ -18,5 +18,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="java-cup-11b-runtime" level="project" />
   </component>
 </module>
