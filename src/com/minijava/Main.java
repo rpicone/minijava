@@ -3,6 +3,7 @@ package com.minijava;
 import java.io.FileReader;
 
 import AST.Program;
+import AST.Visitor.GeradorCodigoVisitor;
 import AST.Visitor.PrettyPrintVisitor;
 import AST.Visitor.TreeVisitor;
 import AST.Visitor.VariaveisVerificacaoVisitor;
@@ -49,12 +50,19 @@ public class Main {
             VariaveisVerificacaoVisitor variaveisVerificacaoVisitor = new VariaveisVerificacaoVisitor();
             variaveisVerificacaoVisitor.visit(program);
 
-
             System.out.println("");
             System.out.println("Visualização em Árvore");
             System.out.println("========================================================================");
             TreeVisitor treeVisitor = new TreeVisitor();
             treeVisitor.visit(program);
+
+            // Exibindo código-fonte do programa (PrettyPrint)
+            System.out.println("");
+            System.out.println("CÓDDIGO C# GERADO");
+            System.out.println("========================================================================");
+            GeradorCodigoVisitor gerador = new GeradorCodigoVisitor();
+            gerador.visit(program);
+
 
             System.out.println("");
             System.out.println("RELATÓRIO FINAL");
