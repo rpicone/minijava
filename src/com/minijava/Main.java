@@ -4,6 +4,7 @@ import java.io.FileReader;
 
 import AST.Program;
 import AST.Visitor.PrettyPrintVisitor;
+import AST.Visitor.TreeVisitor;
 import AST.Visitor.VariaveisVerificacaoVisitor;
 import java_cup.runtime.*;
 
@@ -48,9 +49,17 @@ public class Main {
             VariaveisVerificacaoVisitor variaveisVerificacaoVisitor = new VariaveisVerificacaoVisitor();
             variaveisVerificacaoVisitor.visit(program);
 
+
+            System.out.println("");
+            System.out.println("Visualização em Árvore");
+            System.out.println("========================================================================");
+            TreeVisitor treeVisitor = new TreeVisitor();
+            treeVisitor.visit(program);
+
             System.out.println("");
             System.out.println("RELATÓRIO FINAL");
             System.out.println("========================================================================");
+
             // Exibindo resumo das atividades
             int errosTipo = variaveisVerificacaoVisitor.getErrosEncontrados();
             if (errosTipo > 0) {
