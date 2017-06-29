@@ -1,16 +1,8 @@
-/*
- * CUP specification for the parser for a simple demo language.
- * Change this into the parser for your implementation of MiniJava.
- * CSE 401/P501 Au11.
- */
-
 package com.minijava;
 
 import AST.*;
 import java.util.*;
 import java_cup.runtime.*;
-
-/* Code in the following section is included in the generated parser */
 
 parser code {:
   /* Override default error message routine to handle line numbers correctly */
@@ -37,23 +29,19 @@ parser code {:
     }
 :};
 
-/* end of code included in generated parser
-
-/* Terminals (tokens returned by the scanner) */
-
-/* reserved words: */
+/* Palavra Reservada */
 terminal PRINT;
 
-/* operators: */
+/* Operadores: */
 terminal PLUS, BECOMES, MULT, LESS, BAND, NOT, MINUS;
 
-/* delimiters: */
+/* Delimitadores: */
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURL, RCURL, SEMICOLON, COMMA;
 
-/* tokens with values: */
+/* Tokens valorados */
 terminal String IDENTIFIER, INTEGER;
 
-/* other tokens */
+/* Outros */
 terminal TRUE, FALSE, INT, BOOLEAN, STRING, VOID;
 terminal WHILE, IF, ELSE;
 terminal DOT, LENGTH, NEW, THIS;
@@ -62,18 +50,21 @@ terminal CLASS, EXTENDS;
 terminal MAIN, RETURN;
 
 
-/* Nonterminals */
+/* Nao Terminais */
 
 nonterminal Program Program;
 nonterminal MainClass MainClass;
+
 /* classes */
 nonterminal ClassDeclList ClassDeclList;
 nonterminal ClassDeclList NonEmptyCDL;
 nonterminal ClassDecl ClassDecl;
+
 /* methods */
 nonterminal MethodDeclList MethodDeclList;
 nonterminal MethodDeclList NonEmptyMDL;
 nonterminal MethodDecl MethodDecl;
+
 /* statements */
 nonterminal StatementList StatementList;
 nonterminal StatementList NonEmptySL;
@@ -83,22 +74,20 @@ nonterminal Print DisplayStatement;
 nonterminal While WhileStatement;
 nonterminal If IfStatement;
 nonterminal ArrayAssign ArrayAssignStatement;
-/* formals and variable declarations */
+
+
 nonterminal FormalList FormalList;
 nonterminal FormalList NonEmptyFL;
 nonterminal VarDeclList VarDeclList;
 nonterminal Formal Formal;
 nonterminal VarDecl VarDecl;
-/* expressions */
+
 nonterminal ExpList ArgumentList;
 nonterminal ExpList NonEmptyAL;
 nonterminal Exp Expression;
-/***************/
+
 nonterminal Type Type;
 nonterminal Identifier Identifier;
-
-
-/* Precedence declarations */
 
 precedence left BECOMES;
 precedence left BAND;
@@ -109,9 +98,9 @@ precedence left NOT;
 precedence left LBRACKET;
 precedence left DOT;
 
-/* Productions */
+/* EBNF */
 
-/* Goal ::= MainClass ( ClassDeclaration )* <EOF> */
+/* Equivalente ao: Goal ::= MainClass ( ClassDeclaration )* <EOF> */
 Program ::= MainClass:m ClassDeclList:cd
               {: RESULT = new Program(m, cd, mleft); :};
 
@@ -134,7 +123,6 @@ NonEmptyCDL ::= ClassDecl:cd
               | NonEmptyCDL:cdl ClassDecl:cd
                   {: cdl.add(cd); RESULT = cdl; :};
 
-/* ClassDeclaration */
 ClassDecl ::= CLASS:c Identifier:id LCURL MethodDeclList:mdl RCURL
                 {: RESULT = new ClassDeclSimple(id, new VarDeclList(0), mdl, cleft); :}
 	    | CLASS:c Identifier:id LCURL VarDeclList:vdl MethodDeclList:mdl RCURL
@@ -158,7 +146,7 @@ NonEmptyMDL ::= MethodDecl:md
               | NonEmptyMDL:mdl MethodDecl:md
                   {: mdl.add(md); RESULT = mdl; :};
 
-/* Method Declaration */
+
 MethodDecl ::=  PUBLIC:p Type:t Identifier:id LPAREN FormalList:fl RPAREN LCURL StatementList:sl
 		RETURN Expression:expr SEMICOLON RCURL
                  {: RESULT = new MethodDecl(t, id, fl, new VarDeclList(0), sl, expr, pleft); :}
@@ -166,7 +154,7 @@ MethodDecl ::=  PUBLIC:p Type:t Identifier:id LPAREN FormalList:fl RPAREN LCURL 
 		StatementList:sl RETURN Expression:expr SEMICOLON RCURL
                  {: RESULT = new MethodDecl(t, id, fl, vdl, sl, expr, pleft); :};
 
-/* ( Type Identifier ( "," Type Identifier )* )? */
+
 FormalList ::= NonEmptyFL:fl
                  {: RESULT = fl; :}
 	     | /* epsilon */
@@ -187,15 +175,15 @@ VarDeclList ::= VarDecl:vd
               | VarDeclList:vdl VarDecl:vd
                   {: vdl.add(vd); RESULT = vdl; :};
 
-/* Type Identifier */
+/* INDENTIFICADOR */
 Formal ::= Type:type Identifier:id
              {: RESULT = new Formal(type, id, typeleft); :};
 
-/* Type Identifier ";" */
+/* ";" */
 VarDecl ::= Type:type Identifier:id SEMICOLON
               {: RESULT = new VarDecl(type, id, typeleft); :};
 
-/* Type */
+
 Type ::= INT:integer LBRACKET RBRACKET /* "int" "[" "]" */
            {: RESULT = new IntArrayType(integerleft); :}
        | BOOLEAN:b /* boolean */
