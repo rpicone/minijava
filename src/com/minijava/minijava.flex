@@ -136,7 +136,7 @@ input_character = [^\r\n]
 /* Erros */
 . {
     System.err.println(
-        "\nunexpected character in input: '" + yytext() + "' at line " +
+        "\nu Erro no caracter: '" + yytext() + "' at line " +
         (yyline+1) + " column " + (yycolumn+1));
     return symbol(sym.error);
   }
